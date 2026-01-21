@@ -1,1 +1,0 @@
-CNAME tracker.tudominio.com -> app-name.koyeb.app
