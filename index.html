@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Tracker</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .status { background: green; color: white; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>📱 Ads Device Tracker</h1>
+    <div class="status">Aplicación desplegada en Koyeb</div>
+    <p>Si ves esto, el despliegue fue exitoso.</p>
+    
+    <script>
+        // Verificar conexión API
+        fetch('/api/health')
+            .then(res => res.json())
+            .then(data => console.log('Health check:', data));
+    </script>
+</body>
+</html>
