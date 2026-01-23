@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Monitor - Google Ads Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>📱 Ads Device Tracker</h2>
+            </div>
+            <div class="menu">
+                <a href="#" class="active" onclick="showSection('overview')">
+                    <span>📊 Resumen</span>
+                </a>
+                <a href="#" onclick="showSection('devices')">
+                    <span>📱 Dispositivos</span>
+                </a>
+                <a href="#" onclick="showSection('locations')">
+                    <span>📍 Ubicaciones</span>
+                </a>
+                <a href="#" onclick="showSection('analytics')">
+                    <span>📈 Analítica</span>
+                </a>
+                <a href="#" onclick="showSection('settings')">
+                    <span>⚙️ Configuración</span>
+                </a>
+            </div>
+            <div class="date-selector">
+                <h4>Rango de Fechas</h4>
+                <input type="date" id="startDate">
+                <input type="date" id="endDate">
+                <button onclick="loadData()">Actualizar</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Dashboard de Dispositivos</h1>
+                <div class="header-stats">
+                    <div class="stat-card">
+                        <h3 id="totalDevices">0</h3>
+                        <p>Dispositivos Únicos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalImpressions">0</h3>
+                        <p>Impresiones</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalRequests">0</h3>
+                        <p>Solicitudes</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="activeCountries">0</h3>
+                        <p>Países Activos</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview" class="section active">
+                <div class="charts-row">
+                    <div class="chart-container">
+                        <h3>Dispositivos por Tipo</h3>
+                        <canvas id="deviceChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Distribución Geográfica</h3>
+                        <canvas id="locationChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="data-table">
+                    <h3>Datos por Ubicación</h3>
+                    <table id="locationTable">
+                        <thead>
+                            <tr>
+                                <th>País</th>
+                                <th>Provincia/Estado</th>
+                                <th>Ciudad</th>
+                                <th>Dispositivos</th>
+                                <th>Impresiones</th>
+                                <th>Solicitudes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="locationData">
+                            <!-- Datos dinámicos -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Devices Section -->
+            <div id="devices" class="section">
+                <h2>Análisis por Dispositivo</h2>
+                <div class="device-cards">
+                    <div class="device-card android">
+                        <h3>Android</h3>
+                        <div class="device-stats">
+                            <p><strong>Dispositivos:</strong> <span id="androidDevices">0</span></p>
+                            <p><strong>Impresiones:</strong> <span id="androidImpressions">0</span></p>
+                            <p><strong>CTR:</strong> <span id="androidCTR">0%</span></p>
+                        </div>
+                    </div>
+                    <div class="device-card ios">
+                        <h3>iOS</h3>
+                        <div class="device-stats">
+                            <p><strong>Dispositivos:</strong> <span id="iosDevices">0</span></p>
+                            <p><strong>Impresiones:</strong> <span id="iosImpressions">0</span></p>
+                            <p><strong>CTR:</strong> <span id="iosCTR">0%</span></p>
+                        </div>
+                    </div>
+                    <div class="device-card desktop">
+                        <h3>Desktop</h3>
+                        <div class="device-stats">
+                            <p><strong>Dispositivos:</strong> <span id="desktopDevices">0</span></p>
+                            <p><strong>Impresiones:</strong> <span id="desktopImpressions">0</span></p>
+                            <p><strong>CTR:</strong> <span id="desktopCTR">0%</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locations Section -->
+            <div id="locations" class="section">
+                <h2>Ubicaciones de Dispositivos</h2>
+                <div class="location-filters">
+                    <select id="countryFilter">
+                        <option value="">Todos los países</option>
+                    </select>
+                    <select id="regionFilter">
+                        <option value="">Todas las regiones</option>
+                    </select>
+                    <button onclick="filterLocations()">Filtrar</button>
+                </div>
+                <div id="mapContainer">
+                    <!-- Aquí iría un mapa interactivo -->
+                    <div class="placeholder-map">
+                        <h4>Mapa de Dispositivos</h4>
+                        <p>Activa la integración con Google Maps API para ver las ubicaciones</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="section">
+                <h2>Análisis Detallado</h2>
+                <div class="analytics-charts">
+                    <canvas id="trendChart" width="400" height="200"></canvas>
+                    <canvas id="hourlyChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="section">
+                <h2>Configuración de Google Ads</h2>
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label>Customer ID</label>
+                        <input type="text" id="customerId" placeholder="123-456-7890">
+                    </div>
+                    <div class="form-group">
+                        <label>Developer Token</label>
+                        <input type="password" id="developerToken">
+                    </div>
+                    <div class="form-group">
+                        <label>Client ID</label>
+                        <input type="text" id="clientId">
+                    </div>
+                    <div class="form-group">
+                        <label>Client Secret</label>
+                        <input type="password" id="clientSecret">
+                    </div>
+                    <div class="form-group">
+                        <label>Refresh Token</label>
+                        <input type="password" id="refreshToken">
+                    </div>
+                    <button onclick="saveSettings()">Guardar Configuración</button>
+                    <button onclick="testConnection()" class="secondary">Probar Conexión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

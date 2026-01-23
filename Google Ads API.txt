@@ -1,0 +1,5 @@
+GOOGLE_CLIENT_ID=tu_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=tu_client_secret
+DEVELOPER_TOKEN=tu_developer_token
+REFRESH_TOKEN=tu_refresh_token
+PORT=3000
