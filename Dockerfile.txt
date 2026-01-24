@@ -1,0 +1,17 @@
+# Imagen Node ligera
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copiar package.json e instalar dependencias
+COPY package*.json ./
+RUN npm ci --production
+
+# Copiar el resto de archivos
+COPY . .
+
+# Exponer puerto (Koyeb detecta el puerto por env PORT)
+ENV PORT=3000
+EXPOSE 3000
+
+CMD ["node", "server.js"]
